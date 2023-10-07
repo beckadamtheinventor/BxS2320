@@ -19,7 +19,7 @@ Shader "BeckATI/BxS2320/CRTShader"
             #pragma vertex CustomRenderTextureVertexShader
             #pragma fragment frag
 
-            #include "../rvc-crt.cginc"
+            #include "rvc-crt.cginc"
 			
             sampler2D _RomTex;
             sampler2D _FontTex;
