@@ -44,11 +44,11 @@ CustomRenderTexture:
   m_InitTexture: {fileID: 0}
   m_UpdateMode: 1
   m_InitializationMode: 0
-  m_UpdateZoneSpace: 0
-  m_CurrentUpdateZoneSpace: 0
+  m_UpdateZoneSpace: 1
+  m_CurrentUpdateZoneSpace: 1
   m_UpdateZones: []
   m_UpdatePeriod: 0
   m_ShaderPass: 0
   m_CubemapFaceMask: 4294967295
-  m_DoubleBuffered: 0
+  m_DoubleBuffered: 1
   m_WrapUpdateZones: 0

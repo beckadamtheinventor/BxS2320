@@ -52,8 +52,8 @@ Shader "BeckATI/BxS2320/CRTShader"
 #define GRAM_SIZE         0x00000200
 #define ADDR_FRAM_START   0xF2000000
 #define ADDR_FRAM_END     0xF2FFFFFF
-#define ADDR_FRAM_MASK    0x0000007F
-#define FRAM_SIZE         0x00000080
+#define ADDR_FRAM_MASK    0x000000FF
+#define FRAM_SIZE         0x00000100
 #define ADDR_STACK_START  0xFF000000
 #define ADDR_STACK_END    0xFFFFFFFF
 #define ADDR_STACK_MASK   0x000000FF
@@ -72,13 +72,28 @@ Shader "BeckATI/BxS2320/CRTShader"
 // FRAM is stored in row 255 columns 128-255 channel A
 // RAM is stored in channel R
 
+
+#define SELECT(a,b,v) ((v)?(a):(b))
+#define ONE_IF_LT(v,a) ((v)<(a))
+#define SELECT_IF_LT(v,a,c,d) SELECT(c,d,ONE_IF_LT(v,a))
+#define ONE_IF_GT(v,a) ((v)>(a))
+#define SELECT_IF_GT(v,a,c,d) SELECT(c,d,ONE_IF_GT(v,a))
+#define ONE_IF_LTEQ(v,a) ((v)<=(a))
+#define SELECT_IF_LTEQ(v,a,c,d) SELECT(c,d,ONE_IF_LTEQ(v,a))
+#define ONE_IF_GTEQ(v,a) ((v)>=(a))
+#define SELECT_IF_GTEQ(v,a,c,d) SELECT(c,d,ONE_IF_GTEQ(v,a))
+#define ONE_IF_IN_RANGE(v,a,b) (ONE_IF_GTEQ(v,a)-ONE_IF_GTEQ(v,b))
+#define SELECT_IF_IN_RANGE(v,a,b,c,d) SELECT(c,d,ONE_IF_IN_RANGE(v,a,b))
+#define ONE_IF_EQUAL(v,a) ((v)==(a))
+#define SELECT_IF_EQUAL(v,a,c,d) SELECT(c,d,ONE_IF_EQUAL(v,a))
+
 #define read_emulator_word(addr, component) (_SelfTexture2D[uint2((addr) & 0xFF, (addr) >> 8)].component)
-#define _emu_read_fram(addr, res) res = ((addr)&FRAM_MASK)<0x40?(fram[(addr)&0x3F]&0xffff):(fram[(addr)&0x3F]>>16);
-#define _emu_read_stack(addr, res) res = ((addr)&STACK_MASK)<0x80?(stack[(addr)&0x7F]&0xffff):(stack[(addr)&0x7F]>>16);
-#define _emu_read_gram(addr, res) res = ((addr)&GRAM_MASK)<0x100?(gram[(addr)&0xff]&0xffff):(gram[(addr)&0xff]>>16);
+#define _emu_read_fram(addr, res) res = (regs[0x180+NUM_REGS+((addr)&0x7F)]>>SELECT_IF_GTEQ((addr)&FRAM_MASK,0x80,16,0))&0xffff;
+#define _emu_read_stack(addr, res) res = (regs[0x100+NUM_REGS+((addr)&0x7F)]>>SELECT_IF_GTEQ((addr)&STACK_MASK,0x80,16,0))&0xffff;
+#define _emu_read_gram(addr, res) res = (regs[NUM_REGS+((addr)&0xFF)]>>SELECT_IF_GTEQ((addr)&GRAM_MASK,0x100,16,0))&0xffff;
 #define _emu_read_ram(addr, res) res = _SelfTexture2D[uint2((addr)&0xff, ((addr)>>8)&0xff)].r;
-#define _emu_read_rom(addr, res) regs[5] = res = tex2D(_RomTex, float2(((addr)&0xfff)*1/4096.0f, ((addr)>>12)*1/4096.0f)).r*65535.0f;
-#define emu_read(addr, res) { if ((addr)>=ADDR_FRAM_START&&(addr)<=ADDR_FRAM_END) _emu_read_fram(addr, res) else if ((addr)>=ADDR_GRAM_START&&(addr)<=ADDR_GRAM_END) _emu_read_fram(addr, res) else if ((addr)>=ADDR_STACK_START&&(addr)<=ADDR_STACK_END) _emu_read_stack(addr, res) else if ((addr)>=ADDR_ROM_START&&(addr)<=ADDR_ROM_END) _emu_read_rom(addr, res) else if ((addr)>=ADDR_RAM_START && (addr)<=ADDR_RAM_END) { notfound = 1; for (ci=cacheSize-1; ci>=0; ci--) { if (cache[ci] & 0xffff == (addr)) {res = cache[ci] >> 16; notfound = 0; break; }} if (notfound) _emu_read_ram(addr, res) } else res = 0; }
+#define _emu_read_rom(addr, res) res = tex2Dlod(_RomTex, float4(((addr)&0xfff)/4096.0f, ((addr)>>12)/4096.0f,0,0.0)).r*65535.0f;
+#define emu_read(addr, res) { if ((addr)>=ADDR_FRAM_START&&(addr)<=ADDR_FRAM_END) _emu_read_fram(addr, res) else if ((addr)>=ADDR_GRAM_START&&(addr)<=ADDR_GRAM_END) _emu_read_gram(addr, res) else if ((addr)>=ADDR_STACK_START&&(addr)<=ADDR_STACK_END) _emu_read_stack(addr, res) else if ((addr)>=ADDR_ROM_START&&(addr)<=ADDR_ROM_END) _emu_read_rom(addr, res) else if ((addr)>=ADDR_RAM_START && (addr)<=ADDR_RAM_END) { notfound = 1; [loop] for (ci=cacheSize-1; ci>=0; ci--) { if (cache[ci] & 0xffff == (addr)) {res = cache[ci] >> 16; notfound = 0; break; }} if (notfound) _emu_read_ram(addr, res) } else res = 0; }
 #define emu_read_long(addr, res) {emu_read(addr, val); emu_read(addr+1, tmp); val |= tmp << 16; }
 #define overflowAdd(a, b) (((a)&0x80000000)&&((b)&0x80000000))
 #define overflowAdds(a, b) ((((a)&0x80000000)^((b)&0x80000000))?0:((((a)&0x40000000)&&((b)&0x40000000))^((a+b)&0x80000000)))
@@ -86,9 +101,9 @@ Shader "BeckATI/BxS2320/CRTShader"
 #define overflowSubs(a, b) ((int)(a)<(int)(b))
 #define ddoffset(v) ((((v)&0x80)?((v)-0x100):(v)))
 #define ddoffset16(v) (((v)&0x8000)?((v)-0x10000):(v))
-#define _emu_write_fram(addr, value) { if (((addr)&FRAM_MASK)<0x40) fram[(addr)&0x3F]=(fram[(addr)&0x3F]&0xffff0000)|(value); else fram[(addr)&0x3F]=(fram[(addr)&0x3F]&0x0000ffff)|((value)<<16); }
-#define _emu_write_stack(addr, value) { if (((addr)&STACK_MASK)<0x80) stack[(addr)&0x7F]=(stack[(addr)&0x7F]&0xffff0000)|(value); else stack[(addr)&0x7F]=(stack[(addr)&0x7F]&0x0000ffff)|((value)<<16); }
-#define _emu_write_gram(addr, value) { if (((addr)&GRAM_MASK)<0x100) gram[(addr)&0xFF]=(gram[(addr)&0xFF]&0xffff0000)|(value); else gram[(addr)&0xFF]=(gram[(addr)&0xFF]&0x0000ffff)|((value)<<16); }
+#define _emu_write_fram(addr, value) regs[0x180+NUM_REGS+((addr)&0x7F)] = (regs[0x180+NUM_REGS+((addr)&0x7F)] & SELECT_IF_GTEQ((addr)&FRAM_MASK,0x80,0x0000ffff,0xffff0000)) | (((value)&0xffff)<<SELECT_IF_GTEQ((addr)&FRAM_MASK,0x80,16,0));
+#define _emu_write_stack(addr, value) regs[0x100+NUM_REGS+((addr)&0x7F)] = (regs[0x100+NUM_REGS+((addr)&0x7F)] & SELECT_IF_GTEQ((addr)&STACK_MASK,0x80,0x0000ffff,0xffff0000)) | (((value)&0xffff)<<SELECT_IF_GTEQ((addr)&STACK_MASK,0x80,16,0));
+#define _emu_write_gram(addr, value) regs[NUM_REGS+((addr)&0xFF)] = (regs[NUM_REGS+((addr)&0xFF)] & SELECT_IF_GTEQ((addr)&GRAM_MASK,0x100,0x0000ffff,0xffff0000)) | (((value)&0xffff)<<SELECT_IF_GTEQ((addr)&GRAM_MASK,0x100,16,0));
 #define emu_write(addr, value) { if ((addr)>=ADDR_FRAM_START&&(addr)<=ADDR_FRAM_END) _emu_write_fram(addr, value) else if ((addr)>=ADDR_GRAM_START&&(addr)<=ADDR_GRAM_END) _emu_write_gram(addr, value) else if ((addr)>=ADDR_STACK_START&&(addr)<=ADDR_STACK_END) _emu_write_stack(addr, value) else cache[cacheSize++] = ((addr) & 0xffff) | ((value) << 16);}
 #define emu_write_long(addr, value) { emu_write(addr, value); emu_write((addr)+1, (value)>>16); }
 #define TRUE 1
@@ -96,109 +111,74 @@ Shader "BeckATI/BxS2320/CRTShader"
 #define intasfloat(value) (float)(*(uint32_t*)&(value));
 #define floatasint(value) (int32_t)(*(float*)&(value));
 
+
+// the order here matters to the selection routines
+#define T_WORD 1
+#define T_LONG 3
+#define T_BYTE 4
+
+// return a with 32, 16, or 8 bits updated with b, determined by load type s
+#define UPDATE_NUMBER_SECTION(s,a,b) (((a) & ~(0xff << (8*((s)-T_BYTE))) | ((b) << (8*((s)-T_BYTE))))*ONE_IF_GTEQ(s,T_BYTE)+\
+									  (((a) & ~(0xffff << (16*((s)-T_WORD)))) | ((b) << (16*((s)-T_WORD))))*ONE_IF_LTEQ(s,T_WORD)+\
+									  sval*ONE_IF_EQUAL(s,T_LONG))
+
+#define SELECT_STNO(s) (((s)<32||(s)>=224)?T_LONG:((s)<96?(T_WORD+((s)/32)-1):(T_BYTE+((s)/32)-3)))
+#define SELECT_SVAL(s,a) ((s)>=T_BYTE?(((a) >> (8*((s)-T_BYTE)))&0xff):((s)==T_LONG?(a):(((a) >> (16*((s)-T_WORD)))&0xffff)))
+
+
             uint4 frag (v2f_customrendertexture i) : SV_Target
             {
 				uint idxx = i.globalTexcoord.x * 256.0f;
 				uint idxy = i.globalTexcoord.y * 256.0f;
 				uint idx = idxy * 256 + idxx;
 				uint j;
-				uint4 col;
+				int ci;
+				uint4 col, col2;
 				uint _InputChar = tex2D(_InputCharTex, float2(0.5f, 0.5f)).g*255.0f;
+				[branch]
 				if (read_emulator_word(0, g) != 0xAA55AA55 || _InputChar >= 0xFF) {
-					if (idx == 0) {
-						return uint4(0, 0xAA55AA55, 0, 0);
+					uint v = 0;
+					[unroll]
+					for (j=0; j<8; j++) {
+						col = tex2D(_FontTex, float2(((idx>>3)&15)/16.0f + j/128.0f, (16 - ((idx>>7)&15))/16.0f - ((idx&7)+1)/128.0f));
+						v |= uint((1 << (7-j)) * ONE_IF_GTEQ(col.r, 0.5));
 					}
-					if (idx >= 0xE000 && idx < 0xE800) {
-						uint v = 0;
-						[unroll]
-						for (j=0; j<8; j++) {
-							col = tex2D(_FontTex, float2(((idx>>3)&15)/16.0f + j/128.0f, (16 - ((idx>>7)&15))/16.0f - ((idx&7)+1)/128.0f));
-							if (col.r >= 0.5f && col.g >= 0.5f && col.b >= 0.5f && col.a >= 0.5f) {
-								v |= (1 << (7-j));
-							}
-						}
-						return uint4(v, 0, 0, 0);
-					}
-					return uint4(0, 0, 0, 0);
+					return uint4(v*ONE_IF_IN_RANGE(idx,0xE000,0xE800), idx==0?0xAA55AA55:0, 0, 0);
 				}
 
 				// return this if unchanged
-                col = _SelfTexture2D[uint2(i.globalTexcoord.x * 256.0f, i.globalTexcoord.y * 256.0f)];
+                col = _SelfTexture2D[uint2(idxx, idxy)];
 				
 				[branch]
 				if (i.primitiveID) {
 					uint cacheSize = read_emulator_word(CACHE_SIZE_ADDR, b);
-					if (idx != 0) {
-						if (cacheSize > 0) {
-							[loop]
-							for (j = CACHE_ADDR + cacheSize - 1; j >= CACHE_ADDR; j--) {
-								uint val = read_emulator_word(j, b);
-								if (idx == (val & 0xffff)) {
-									col.r = val >> 16;
-									break;
-								}
-							}
-						}
-						if (idx == CACHE_SIZE_ADDR) {
-							col.b = 0;
-						}
-						if (idx >= CACHE_ADDR && idx <= CACHE_ADDR + CACHE_SIZE) {
-							col.b = 0;
-						}
-						if (idx == KEYCODE_RAM_PTR) {
-							col.r = _InputChar;
-						}
+					for (ci = 0x41+cacheSize - 1; ci >= 0x41; ci--) {
+						uint val = _SelfTexture2D[uint2(ci, 0xFF)].b;
+						col.r = (idx == (val & 0xffff))?(val>>16):col.r;
 					}
+					col.b = (idx>=CACHE_SIZE_ADDR)?0:col.b;
+					col.r = (idx==KEYCODE_RAM_PTR)?_InputChar:col.r;
 				}
 				// Compute next machine state
-				else if (idxy == 255) {
-#define T_WORD 1
-#define T_LONG 3
-#define T_BYTE 4
-#define stshift8 (8*(stno-T_BYTE))
-#define stshift16 (16*(stno-T_WORD))
-#define stshift8b (8*(stno2-T_BYTE))
-#define stshift16b (16*(stno2-T_WORD))
-#define stshift8c (8*(stno3-T_BYTE))
-#define stshift16c (16*(stno3-T_WORD))
-#define rno2 (val&31)
-#define rno3 ((val>>8)&31)
-					uint stack[STACK_SIZE/2];
-					uint fram[FRAM_SIZE/2];
-					uint gram[GRAM_SIZE];
-					uint regs[NUM_REGS];
+				else {
+					uint regs[NUM_REGS + GRAM_SIZE/2 + STACK_SIZE/2 + FRAM_SIZE/2];
 					uint cacheSize = 0;
 					uint cache[CACHE_SIZE];
-					int ci;
 					uint notfound, arg, val, val2, val3, sval, sval2, sval3, opcode, jump;
 					uint stno, stno2, stno3, rno;
 
 					[unroll]
-					for (j=0; j<GRAM_SIZE; j++) {
-						gram[j] = read_emulator_word(0xff00+j, g);
-					}
-					[unroll]
-					for (j=0; j<NUM_REGS; j++) {
-						regs[j] = read_emulator_word(R0_ADDR+j, b);
-					}
-					[unroll]
-					for (j=0; j<FRAM_SIZE/2; j++) {
-						fram[j] = read_emulator_word(0xff00+j, a);
-					}
-					[unroll]
-					for (j=0; j<STACK_SIZE/2; j++) {
-						stack[j] = read_emulator_word(0xff80+j, a);
+					for (ci=255; ci>=0; ci--) {
+						col2 = _SelfTexture2D[uint2(ci, 0xFF)];
+						regs[NUM_REGS+ci] = col2.g;
+						regs[NUM_REGS+0x100+ci] = col2.a;
+						regs[ci&(NUM_REGS-1)] = col2.b;
 					}
 
-					int loops = _IPF * unity_DeltaTime.x;
-					if (loops > _IPF_MAX)
-						loops = _IPF_MAX;
+					int loops = min(_IPF_MAX, _IPF * unity_DeltaTime.x);
 
 					[loop]
-					for (int loop=0; loop<loops; loop++) {
-						if (cacheSize >= CACHE_SIZE-1) {
-							break;
-						}
+					for (int loop=0; (loop<loops)-(cacheSize>=CACHE_SIZE-1); loop++) {
 						regs[4] = loops;
 						regs[3]++;
 						emu_read(regs[0], opcode);
@@ -206,82 +186,21 @@ Shader "BeckATI/BxS2320/CRTShader"
 						regs[0]++;
 						emu_read(regs[0], val);
 						opcode &= 0xff;
-						jump = ((regs[1] >> ((opcode & 0x6) >> 1)) ^ (opcode & 1)) & 1;
 						rno = arg & 31;
-						if (arg < 32 || arg >= 224) { // rX || rXf
-							sval = regs[rno];
-							stno = T_LONG;
-						} else if (arg < 64) { // rXl
-							sval = regs[rno] & 0xffff;
-							stno = T_WORD;
-						} else if (arg < 96) { // rXh
-							sval = regs[rno] >> 16;
-							stno = T_WORD + 1;
-						} else if (arg < 128) { // rXa
-							sval = (regs[rno] >> 0) & 0xff;
-							stno = T_BYTE + 0;
-						} else if (arg < 160) { // rXb
-							sval = (regs[rno] >> 8) & 0xff;
-							stno = T_BYTE + 1;
-						} else if (arg < 192) { // rXc
-							sval = (regs[rno] >> 16) & 0xff;
-							stno = T_BYTE + 2;
-						} else if (arg < 224) { // rXd
-							sval = (regs[rno] >> 24) & 0xff;
-							stno = T_BYTE + 3;
-						}
-						#define arg (val&0xff)
-						if (arg < 32 || arg >= 224) { // rX || rXf
-							sval2 = regs[rno2];
-							stno2 = T_LONG;
-						} else if (arg < 64) { // rXl
-							sval2 = regs[rno2] & 0xffff;
-							stno2 = T_WORD;
-						} else if (arg < 96) { // rXh
-							sval2 = regs[rno2] >> 16;
-							stno2 = T_WORD + 1;
-						} else if (arg < 128) { // rXa
-							sval2 = (regs[rno2] >> 0) & 0xff;
-							stno2 = T_BYTE + 0;
-						} else if (arg < 160) { // rXb
-							sval2 = (regs[rno2] >> 8) & 0xff;
-							stno2 = T_BYTE + 1;
-						} else if (arg < 192) { // rXc
-							sval2 = (regs[rno2] >> 16) & 0xff;
-							stno2 = T_BYTE + 2;
-						} else if (arg < 224) { // rXd
-							sval2 = (regs[rno2] >> 24) & 0xff;
-							stno2 = T_BYTE + 3;
-						}
-						#undef arg
-						#define arg (val>>8)
-						if (arg < 32 || arg >= 224) { // rX || rXf
-							sval3 = regs[rno3];
-							stno3 = T_LONG;
-						} else if (arg < 64) { // rXl
-							sval3 = regs[rno3] & 0xffff;
-							stno3 = T_WORD;
-						} else if (arg < 96) { // rXh
-							sval3 = regs[rno3] >> 16;
-							stno3 = T_WORD + 1;
-						} else if (arg < 128) { // rXa
-							sval3 = (regs[rno3] >> 0) & 0xff;
-							stno3 = T_BYTE + 0;
-						} else if (arg < 160) { // rXb
-							sval3 = (regs[rno3] >> 8) & 0xff;
-							stno3 = T_BYTE + 1;
-						} else if (arg < 192) { // rXc
-							sval3 = (regs[rno3] >> 16) & 0xff;
-							stno3 = T_BYTE + 2;
-						} else if (arg < 224) { // rXd
-							sval3 = (regs[rno3] >> 24) & 0xff;
-							stno3 = T_BYTE + 3;
-						}
-						#undef arg
-						if (opcode >= 0xC8 && opcode < 0xF8) { // ret, call and jump opcodes
-							opcode &= 0xF8;
-						}
-						if (opcode >= 0x3E && opcode < 0x70) { // arithmetic opcodes
+					#define rno2 (val&31)
+					#define rno3 ((val>>8)&31)
+						stno = SELECT_STNO(arg);
+						sval = SELECT_SVAL(stno, regs[rno]);
+						stno2 = SELECT_STNO(val&0xff);
+						sval2 = SELECT_SVAL(stno2, regs[rno2]);
+						stno3 = SELECT_STNO(val>>8);
+						sval3 = SELECT_SVAL(stno3, regs[rno3]);
+						// prep for conditionals
+						jump = ((regs[1] >> ((opcode & 0x6) >> 1)) ^ (opcode & 1)) & 1;
+						// ret, call and jump opcodes
+						opcode = SELECT_IF_IN_RANGE(opcode,0xC8,0xF8,opcode&0xF8,opcode);
+						[branch]
+						if (opcode >= 0x3E && opcode < 0x70) {
 							regs[0]++;
 							if (opcode & 1 && opcode >= 0x40) { // arithmetic opcodes with immediate
 								if ((opcode < 0x56 || opcode >= 0x60)) { // arithmetic opcodes with variable length immediate
@@ -299,10 +218,12 @@ Shader "BeckATI/BxS2320/CRTShader"
 								val = rno << 8;
 							}
 							opcode &= 0xFE;
-						} else { // non-arithmetic opcodes
+						} else {
+							// many non arithmetic opcodes have an 8 bit displacement
 							sval2 += ddoffset(val >> 8);
 						}
-						
+
+						[branch]
 						switch (opcode) {
 							case 0x00: // nop
 								break;
@@ -311,18 +232,18 @@ Shader "BeckATI/BxS2320/CRTShader"
 								if (stno == T_LONG) {
 									regs[rno] = sval2;
 								} else if (stno < T_BYTE) {
-									regs[rno] = (regs[rno] & ~(0xffff << stshift16)) | (sval2 << stshift16);
+									regs[rno] = (regs[rno] & ~(0xffff << (16*(stno-T_WORD)))) | (sval2 << (16*(stno-T_WORD)));
 								} else {
-									regs[rno] = (regs[rno] & ~(0xff << stshift8)) | (sval2 << stshift8);
+									regs[rno] = (regs[rno] & ~(0xff << (8*(stno-T_BYTE)))) | (sval2 << (8*(stno-T_BYTE)));
 								}
 								break;
 							case 0x02: // ldz
 								if (stno == T_LONG) {
 									regs[rno] = 0;
 								} else if (stno < T_BYTE) {
-									regs[rno] = (regs[rno] & ~(0xffff << stshift16));
+									regs[rno] = (regs[rno] & ~(0xffff << (16*(stno-T_WORD))));
 								} else {
-									regs[rno] = (regs[rno] & ~(0xff << stshift8));
+									regs[rno] = (regs[rno] & ~(0xff << (8*(stno-T_BYTE))));
 								}
 								break;
 							case 0x03: // ldi
@@ -332,9 +253,9 @@ Shader "BeckATI/BxS2320/CRTShader"
 									regs[0]++;
 									regs[rno] = val | (val2 << 16);
 								} else if (stno < T_BYTE) {
-									regs[rno] = (regs[rno] & ~(0xffff << stshift16)) | (val << stshift16);
+									regs[rno] = (regs[rno] & ~(0xffff << (16*(stno-T_WORD)))) | (val << (16*(stno-T_WORD)));
 								} else {
-									regs[rno] = (regs[rno] & ~(0xff << stshift8)) | ((val & 0xff) << stshift8);
+									regs[rno] = (regs[rno] & ~(0xff << (8*(stno-T_BYTE)))) | ((val & 0xff) << (8*(stno-T_BYTE)));
 								}
 								break;
 							case 0x04: // ex
@@ -343,11 +264,11 @@ Shader "BeckATI/BxS2320/CRTShader"
 									regs[rno] = sval2;
 									regs[rno2] = sval;
 								} else if (stno < T_BYTE) {
-									regs[rno] = (regs[rno] & ~(0xffff << stshift16)) | ((sval2 & 0xffff) << stshift16);
-									regs[rno2] = (regs[rno2] & ~(0xffff << stshift16b)) | ((sval & 0xffff) << stshift16b);
+									regs[rno] = (regs[rno] & ~(0xffff << (16*(stno-T_WORD)))) | ((sval2 & 0xffff) << (16*(stno-T_WORD)));
+									regs[rno2] = (regs[rno2] & ~(0xffff << (16*(stno2-T_WORD)))) | ((sval & 0xffff) << (16*(stno2-T_WORD)));
 								} else {
-									regs[rno] = (regs[rno] & ~(0xff << stshift8)) | ((sval2 & 0xff) << stshift8);
-									regs[rno2] = (regs[rno2] & ~(0xff << stshift8b)) | ((sval & 0xff) << stshift8b);
+									regs[rno] = (regs[rno] & ~(0xff << (8*(stno-T_BYTE)))) | ((sval2 & 0xff) << (8*(stno-T_BYTE)));
+									regs[rno2] = (regs[rno2] & ~(0xff << (8*(stno2-T_BYTE)))) | ((sval & 0xff) << (8*(stno2-T_BYTE)));
 								}
 								break;
 							case 0x05: // ildr rX, rY, offset
@@ -358,9 +279,9 @@ Shader "BeckATI/BxS2320/CRTShader"
 									emu_read(sval2+1, val2);
 									regs[rno] |= val2 << 16;
 								} else if (stno < T_BYTE) {
-									regs[rno] = (regs[rno] & ~(0xffff << stshift16)) | (val2 << stshift16);
+									regs[rno] = (regs[rno] & ~(0xffff << (16*(stno-T_WORD)))) | (val2 << (16*(stno-T_WORD)));
 								} else {
-									regs[rno] = (regs[rno] & ~(0xff << stshift8)) | ((val2 & 0xff) << stshift8);
+									regs[rno] = (regs[rno] & ~(0xff << (8*(stno-T_BYTE)))) | ((val2 & 0xff) << (8*(stno-T_BYTE)));
 								}
 								break;
 							case 0x06: // ild rX, imm32
@@ -373,9 +294,9 @@ Shader "BeckATI/BxS2320/CRTShader"
 									emu_read(val2+1, val);
 									regs[rno] = val3 | (val << 16);
 								} else if (stno < T_BYTE) {
-									regs[rno] = (regs[rno] & ~(0xffff << stshift16)) | (val3 << stshift16);
+									regs[rno] = (regs[rno] & ~(0xffff << (16*(stno-T_WORD)))) | (val3 << (16*(stno-T_WORD)));
 								} else {
-									regs[rno] = (regs[rno] & ~(0xff << stshift8)) | ((val3 & 0xff) << stshift8);
+									regs[rno] = (regs[rno] & ~(0xff << (8*(stno-T_BYTE)))) | ((val3 & 0xff) << (8*(stno-T_BYTE)));
 								}
 								break;
 							case 0x07: // str rX, rY, offset
@@ -413,10 +334,10 @@ Shader "BeckATI/BxS2320/CRTShader"
 									regs[rno] = sval;
 								} else if (stno < T_BYTE) {
 									sval &= 0xffff;
-									regs[rno] = (regs[rno] & ~(0xffff << stshift16)) | ((sval & 0xffff) << stshift16);
+									regs[rno] = (regs[rno] & ~(0xffff << (16*(stno-T_WORD)))) | ((sval & 0xffff) << (16*(stno-T_WORD)));
 								} else {
 									sval &= 0xff;
-									regs[rno] = (regs[rno] & ~(0xff << stshift8)) | (sval << stshift8);
+									regs[rno] = (regs[rno] & ~(0xff << (8*(stno-T_BYTE)))) | (sval << (8*(stno-T_BYTE)));
 								}
 								if (sval == 0) {
 									regs[1] |= F_ZERO|F_CARRY;
@@ -435,10 +356,10 @@ Shader "BeckATI/BxS2320/CRTShader"
 									regs[rno] = sval;
 								} else if (stno < T_BYTE) {
 									sval &= 0xffff;
-									regs[rno] = (regs[rno] & ~(0xffff << stshift16)) | ((sval & 0xffff) << stshift16);
+									regs[rno] = (regs[rno] & ~(0xffff << (16*(stno-T_WORD)))) | ((sval & 0xffff) << (16*(stno-T_WORD)));
 								} else {
 									sval &= 0xff;
-									regs[rno] = (regs[rno] & ~(0xff << stshift8)) | (sval << stshift8);
+									regs[rno] = (regs[rno] & ~(0xff << (8*(stno-T_BYTE)))) | (sval << (8*(stno-T_BYTE)));
 								}
 								if (sval == 0) {
 									regs[1] |= F_ZERO;
@@ -602,10 +523,10 @@ Shader "BeckATI/BxS2320/CRTShader"
 									regs[rno] = val | (val2 << 16);
 								} else if (stno < T_BYTE) {
 									emu_read(regs[2], val);
-									regs[rno] = (regs[rno] & ~(0xffff << stshift16)) | (val << stshift16);
+									regs[rno] = (regs[rno] & ~(0xffff << (16*(stno-T_WORD)))) | (val << (16*(stno-T_WORD)));
 								} else {
 									emu_read(regs[2], val);
-									regs[rno] = (regs[rno] & ~(0xff << stshift8)) | ((val & 0xff) << stshift8);
+									regs[rno] = (regs[rno] & ~(0xff << (8*(stno-T_BYTE)))) | ((val & 0xff) << (8*(stno-T_BYTE)));
 								}
 								regs[2]++;
 								break;
@@ -694,43 +615,35 @@ Shader "BeckATI/BxS2320/CRTShader"
 									if (stno == T_LONG) {
 										regs[rno] = sval;
 									} else if (stno < T_BYTE) {
-										regs[rno] = (regs[rno] & ~(0xffff << stshift16)) | (sval << stshift16);
+										regs[rno] = (regs[rno] & ~(0xffff << (16*(stno-T_WORD)))) | (sval << (16*(stno-T_WORD)));
 									} else {
-										regs[rno] = (regs[rno] & ~(0xff << stshift8)) | (sval << stshift8);
+										regs[rno] = (regs[rno] & ~(0xff << (8*(stno-T_BYTE)))) | (sval << (8*(stno-T_BYTE)));
 									}
 								}
 								break;
 							default:
 								regs[5] = regs[0];
+								regs[6] = opcode;
 								regs[0] = 0;
 								break;
 						}
+						[branch]
 						if (opcode >= 0x3E && opcode < 0x70) { // lor, land, arithmetic opcodes
 							regs[1] = (regs[1] & ~(F_CARRY|F_CARRYSAVE|F_ZERO)) | ((regs[1] & F_CARRYSAVE)?F_CARRY:0) | (sval==0?F_ZERO:0);
 							if (opcode != 0x4E && opcode != 0x6E) { // don't store registers for cmp opcodes
 								if (stno3 == T_LONG) {
 									regs[rno3] = sval;
 								} else if (stno3 < T_BYTE) {
-									regs[rno3] = (regs[rno3] & ~(0xffff << stshift16c)) | (sval << stshift16c);
+									regs[rno3] = (regs[rno3] & ~(0xffff << (16*(stno3-T_WORD)))) | (sval << (16*(stno3-T_WORD)));
 								} else {
-									regs[rno3] = (regs[rno3] & ~(0xff << stshift8c)) | (sval << stshift8c);
+									regs[rno3] = (regs[rno3] & ~(0xff << (8*(stno3-T_BYTE))) | (sval << (8*(stno3-T_BYTE))));
 								}
 							}
 						}
 					}
-					if (idxx < NUM_REGS) {
-						col.b = regs[idxx];
-					} else if (idxx == 0x40) { // cache size address
-						col.b = cacheSize;
-					} else { // cache values
-						col.b = cache[idxx - 0x41];
-					}
-					col.g = gram[idxx];
-					if (idxx < 128) {
-						col.a = fram[idxx];
-					} else {
-						col.a = stack[idxx - 128];
-					}
+					col.b = SELECT_IF_LT(idxx,NUM_REGS,regs[idxx],SELECT_IF_GTEQ(idxx,0x41,cache[idxx-0x41],cacheSize));
+					col.g = regs[NUM_REGS+idxx];
+					col.a = regs[NUM_REGS+0x100+idxx];
 				}
                 return col;
             }

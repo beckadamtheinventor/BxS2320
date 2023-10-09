@@ -28,17 +28,11 @@ Shader "BeckATI/BxS2320/Display"
 					UNITY_VERTEX_INPUT_INSTANCE_ID
 				};
 
-
 				struct v2f
 				{
 					float2 uv : TEXCOORD0;
 					float4 vertex : SV_POSITION;
 					UNITY_VERTEX_OUTPUT_STEREO
-				};
-
-				struct Input
-				{
-					float2 uv_MainTex;
 				};
 
 				Texture2D<uint4> _MainTex;
@@ -70,30 +64,25 @@ Shader "BeckATI/BxS2320/Display"
 					float ftx = (i.uv.x * (1.0f + _OutputMargin) - 0.5f * _OutputMargin) * _OutputSize;
 					float fty = (1.0f - (i.uv.y * (1.0f + _OutputMargin) - 0.5f * _OutputMargin)) * _OutputSize;
 					fixed4 col = fixed4(0, 0, 0, 1);
-					if (ftx >= 0 && ftx < _OutputSize && fty >= 0 && fty < _OutputSize) {
-						uint tcx = ftx % _CharSizeX;
-						uint tcy = fty % _CharSizeY;
-						uint tx = ftx / _CharSizeX;
-						uint ty = fty / _CharSizeY;
-						uint dflags = read(0xffff, r);
-						if (dflags & 0x8000) {
-							uint tp = tx + ty * _OutputSize / _CharSizeX;
-							uint chr = read(0xff00+tp, g);
-							uint chrp = read(0xfffe, r) + (chr & 0xff) * 8;
-							uint c = (readbyte(chrp + tcy, r) >> ((_CharSizeX-1) - tcx)) & 1;
-							if (dflags & 0x4000) {
-								chr ^= 0x80000000;
-							}
-							if (chr & 0x80000000) {
-								c = 1 - c;
-							}
-							col = fixed4(c, c, c, 1) * _Color;
-							float tintr = (((chr >> 26) & 31) + 1) / 32.0f;
-							float tintg = (((chr >> 21) & 31) + 1) / 32.0f;
-							float tintb = (((chr >> 16) & 31) + 1) / 32.0f;
-							col.rgb *= fixed3(tintr, tintg, tintb);
-						}
-					}
+					uint tcx = ftx % _CharSizeX;
+					uint tcy = fty % _CharSizeY;
+					uint tx = ftx / _CharSizeX;
+					uint ty = fty / _CharSizeY;
+					uint dflags = read(0xffff, r);
+					uint tp = tx + ty * _OutputSize / _CharSizeX;
+					uint chr = read(0xff00+tp, g);
+					uint chrp = read(0xfffe, r) + (chr & 0xff) * 8;
+					uint c = (readbyte(chrp + tcy, r) >> ((_CharSizeX-1) - tcx)) & 1;
+					chr ^= (dflags&0x4000)?0x80000000:0;
+					c = (chr&0x80000000)?(1-c):c;
+					col = fixed4(c, c, c, 1) * _Color;
+					float tintr = (((chr >> 26) & 31) + 1) / 32.0f;
+					float tintg = (((chr >> 21) & 31) + 1) / 32.0f;
+					float tintb = (((chr >> 16) & 31) + 1) / 32.0f;
+					col.rgb *= fixed3(tintr, tintg, tintb);
+					col.rgb = (dflags&0x8000)?col.rgb:0;
+					col.rgb = (ftx >= 0 && ftx < _OutputSize && fty >= 0 && fty < _OutputSize)?col.rgb:0;
+					UNITY_APPLY_FOG(i.fogCoord, col);
 					return col;
 				}
 				ENDCG
