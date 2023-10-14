@@ -203,6 +203,23 @@ macro delay? reg
 	end if
 end macro
 
+macro testhalt? reg, val
+	if reg < 256
+		db $FF, reg and $FF
+		if reg < r0l
+			dd val
+		else if reg < r0a
+			dw val
+		else if reg < r0f
+			db val, 0
+		else
+			dd val
+		end if
+	else
+		err "Invalid opcode argument. Should be 'testhalt reg, value'"
+	end if
+end macro
+
 
 ; load indirect sreg+offset -> dreg
 macro ildr? dreg, sreg, offset:0

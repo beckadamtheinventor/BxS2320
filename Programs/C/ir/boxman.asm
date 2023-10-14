@@ -1,134 +1,134 @@
 
-DEFINE_FUNCTION "LoadLevel", $0, $D08E16E0, $1
+DEFINE_FUNCTION "LoadLevel", $0, $158816E0, $1
 $3     : ENTER $0
 $5     : LEA_LOCAL $2
 $7     : LOAD_WORD
 $8     : COMPARE_EQ_CONST $0
-$A     : BNZ $19, $D09CC120
+$A     : BNZ $19, $1501BAE0
 $C     : LEA_GLOBAL $4
 $E     : LOAD_INT
 $F     : PUSH_ARG
-$10    : IMM_PROG_OFFSET $54D, $D09CBCC0
+$10    : IMM_PROG_OFFSET $54D, $1501C1C0
 $12    : PUSH_ARG
-$13    : CALL "_strcpy", $D08E0860
+$13    : CALL "_strcpy", $158807C0
 $15    : ADJ $2
-$17    : JMP $2B, $D09CB4F0
+$17    : JMP $2B, $1501B8B0
 $19    : LEA_LOCAL $2
 $1B    : LOAD_WORD
 $1C    : COMPARE_EQ_CONST $1
-$1E    : BNZ $2B, $D09CC080
+$1E    : BNZ $2B, $1501BA40
 $20    : LEA_GLOBAL $4
 $22    : LOAD_INT
 $23    : PUSH_ARG
-$24    : IMM_PROG_OFFSET $52F, $D09CB680
+$24    : IMM_PROG_OFFSET $52F, $1501B770
 $26    : PUSH_ARG
-$27    : CALL "_strcpy", $D08E0860
+$27    : CALL "_strcpy", $158807C0
 $29    : ADJ $2
 $2B    : LEAVE
 
-DEFINE_FUNCTION "BoxManDrawC", $2C, $D08E17C0, $1
+DEFINE_FUNCTION "BoxManDrawC", $2C, $158817C0, $1
 $2F    : ENTER $0
 $31    : LEA_LOCAL $2
 $33    : LOAD_CHAR
 $34    : COMPARE_EQ_CONST $41
-$36    : BNZ $42, $D09CC0D0
+$36    : BNZ $42, $1501C210
 $38    : PUSH_ARG_IMM $23
 $3A    : PUSH_ARG_IMM $7C00
-$3C    : CALL "_printchar", $D08E13E0
+$3C    : CALL "_printchar", $158813E0
 $3E    : ADJ $2
-$40    : JMP $E5, $D09CBDB0
+$40    : JMP $E5, $1501BC20
 $42    : LEA_LOCAL $2
 $44    : LOAD_CHAR
 $45    : COMPARE_EQ_CONST $42
-$47    : BNZ $53, $D09CC3F0
+$47    : BNZ $53, $1501B9A0
 $49    : PUSH_ARG_IMM $23
 $4B    : PUSH_ARG_IMM $3E0
-$4D    : CALL "_printchar", $D08E13E0
+$4D    : CALL "_printchar", $158813E0
 $4F    : ADJ $2
-$51    : JMP $E5, $D09CBC20
+$51    : JMP $E5, $1501BF90
 $53    : LEA_LOCAL $2
 $55    : LOAD_CHAR
 $56    : COMPARE_EQ_CONST $43
-$58    : BNZ $64, $D09CB770
+$58    : BNZ $64, $1501B900
 $5A    : PUSH_ARG_IMM $23
 $5C    : PUSH_ARG_IMM $1F
-$5E    : CALL "_printchar", $D08E13E0
+$5E    : CALL "_printchar", $158813E0
 $60    : ADJ $2
-$62    : JMP $E5, $D09CBBD0
+$62    : JMP $E5, $1501BC70
 $64    : LEA_LOCAL $2
 $66    : LOAD_CHAR
 $67    : COMPARE_EQ_CONST $44
-$69    : BNZ $75, $D09CC2B0
+$69    : BNZ $75, $1501B9F0
 $6B    : PUSH_ARG_IMM $23
 $6D    : PUSH_ARG_IMM $7FE0
-$6F    : CALL "_printchar", $D08E13E0
+$6F    : CALL "_printchar", $158813E0
 $71    : ADJ $2
-$73    : JMP $E5, $D09CBAE0
+$73    : JMP $E5, $1501BD10
 $75    : LEA_LOCAL $2
 $77    : LOAD_CHAR
 $78    : COMPARE_EQ_CONST $45
-$7A    : BNZ $86, $D09CC300
+$7A    : BNZ $86, $1501BB30
 $7C    : PUSH_ARG_IMM $23
 $7E    : PUSH_ARG_IMM $3FF
-$80    : CALL "_printchar", $D08E13E0
+$80    : CALL "_printchar", $158813E0
 $82    : ADJ $2
-$84    : JMP $E5, $D09CBEF0
+$84    : JMP $E5, $1501B590
 $86    : LEA_LOCAL $2
 $88    : LOAD_CHAR
 $89    : COMPARE_EQ_CONST $61
-$8B    : BNZ $97, $D09CB950
+$8B    : BNZ $97, $1501B950
 $8D    : PUSH_ARG_IMM $4F
 $8F    : PUSH_ARG_IMM $7C00
-$91    : CALL "_printchar", $D08E13E0
+$91    : CALL "_printchar", $158813E0
 $93    : ADJ $2
-$95    : JMP $E5, $D09CC030
+$95    : JMP $E5, $1501BF40
 $97    : LEA_LOCAL $2
 $99    : LOAD_CHAR
 $9A    : COMPARE_EQ_CONST $62
-$9C    : BNZ $A8, $D09CB900
+$9C    : BNZ $A8, $1501BA90
 $9E    : PUSH_ARG_IMM $4F
 $A0    : PUSH_ARG_IMM $3E0
-$A2    : CALL "_printchar", $D08E13E0
+$A2    : CALL "_printchar", $158813E0
 $A4    : ADJ $2
-$A6    : JMP $E5, $D09CC350
+$A6    : JMP $E5, $1501C170
 $A8    : LEA_LOCAL $2
 $AA    : LOAD_CHAR
 $AB    : COMPARE_EQ_CONST $63
-$AD    : BNZ $B9, $D09CB860
+$AD    : BNZ $B9, $1501BE50
 $AF    : PUSH_ARG_IMM $4F
 $B1    : PUSH_ARG_IMM $1F
-$B3    : CALL "_printchar", $D08E13E0
+$B3    : CALL "_printchar", $158813E0
 $B5    : ADJ $2
-$B7    : JMP $E5, $D09CBEA0
+$B7    : JMP $E5, $1501BE00
 $B9    : LEA_LOCAL $2
 $BB    : LOAD_CHAR
 $BC    : COMPARE_EQ_CONST $64
-$BE    : BNZ $CA, $D09CBE00
+$BE    : BNZ $CA, $1501B7C0
 $C0    : PUSH_ARG_IMM $4F
 $C2    : PUSH_ARG_IMM $7FE0
-$C4    : CALL "_printchar", $D08E13E0
+$C4    : CALL "_printchar", $158813E0
 $C6    : ADJ $2
-$C8    : JMP $E5, $D09CBC70
+$C8    : JMP $E5, $1501BEF0
 $CA    : LEA_LOCAL $2
 $CC    : LOAD_CHAR
 $CD    : COMPARE_EQ_CONST $65
-$CF    : BNZ $DB, $D09CB720
+$CF    : BNZ $DB, $1501BEA0
 $D1    : PUSH_ARG_IMM $4F
 $D3    : PUSH_ARG_IMM $3FF
-$D5    : CALL "_printchar", $D08E13E0
+$D5    : CALL "_printchar", $158813E0
 $D7    : ADJ $2
-$D9    : JMP $E5, $D09CBE50
+$D9    : JMP $E5, $1501BB80
 $DB    : LEA_LOCAL $2
 $DD    : LOAD_CHAR
 $DE    : PUSH_ARG
 $DF    : PUSH_ARG_IMM $7FFF
-$E1    : CALL "_printchar", $D08E13E0
+$E1    : CALL "_printchar", $158813E0
 $E3    : ADJ $2
 $E5    : LEAVE
 
-DEFINE_FUNCTION "BoxManDrawScreen", $E6, $D08E1840, $0
+DEFINE_FUNCTION "BoxManDrawScreen", $E6, $15881840, $0
 $E9    : ENTER -$4
-$EB    : CALL "_cleartty", $D08E04A0
+$EB    : CALL "_cleartty", $15880A40
 $ED    : ADJ $0
 $EF    : LEA_GLOBAL $4
 $F1    : LOAD_INT
@@ -162,7 +162,7 @@ $120   : SUB
 $121   : SHR_CONST $1
 $123   : SUB_CONST $1
 $125   : PUSH_ARG
-$126   : CALL "_settextxy", $D08E1560
+$126   : CALL "_settextxy", $15881560
 $128   : ADJ $2
 $12A   : IMM $0
 $12C   : STORE_LOCAL -$3, $1
@@ -174,16 +174,16 @@ $135   : LOAD_CHAR
 $136   : ADD_CONST $2
 $138   : POP_SEC
 $139   : COMPARE_LT
-$13A   : BNZ $14D, $D09CC210
+$13A   : BNZ $14D, $1501BFE0
 $13C   : PUSH_ARG_IMM $23
 $13E   : PUSH_ARG_IMM $7FFF
-$140   : CALL "_printchar", $D08E13E0
+$140   : CALL "_printchar", $158813E0
 $142   : ADJ $2
 $144   : LEA_LOCAL -$3
 $146   : LOAD_CHAR
 $147   : INC
 $148   : STORE_LOCAL -$3, $1
-$14B   : JMP $12F, $D09CC3A0
+$14B   : JMP $12F, $1501BD60
 $14D   : LEA_GLOBAL $0
 $14F   : LOAD_CHAR
 $150   : EX_SEC_PRI
@@ -204,7 +204,7 @@ $165   : LOAD_CHAR
 $166   : POP_SEC
 $167   : ADD
 $168   : PUSH_ARG
-$169   : CALL "_settextxy", $D08E1560
+$169   : CALL "_settextxy", $15881560
 $16B   : ADJ $2
 $16D   : IMM $0
 $16F   : STORE_LOCAL -$3, $1
@@ -216,16 +216,16 @@ $178   : LOAD_CHAR
 $179   : ADD_CONST $2
 $17B   : POP_SEC
 $17C   : COMPARE_LT
-$17D   : BNZ $190, $D09CBFE0
+$17D   : BNZ $190, $1501C260
 $17F   : PUSH_ARG_IMM $23
 $181   : PUSH_ARG_IMM $7FFF
-$183   : CALL "_printchar", $D08E13E0
+$183   : CALL "_printchar", $158813E0
 $185   : ADJ $2
 $187   : LEA_LOCAL -$3
 $189   : LOAD_CHAR
 $18A   : INC
 $18B   : STORE_LOCAL -$3, $1
-$18E   : JMP $172, $D09CC170
+$18E   : JMP $172, $1501C350
 $190   : IMM $0
 $192   : STORE_LOCAL -$4, $1
 $195   : LEA_LOCAL -$4
@@ -235,7 +235,7 @@ $199   : LEA_GLOBAL $1
 $19B   : LOAD_CHAR
 $19C   : POP_SEC
 $19D   : COMPARE_LT
-$19E   : BNZ $202, $D09CC260
+$19E   : BNZ $202, $1501C030
 $1A0   : LEA_GLOBAL $0
 $1A2   : LOAD_CHAR
 $1A3   : EX_SEC_PRI
@@ -256,11 +256,11 @@ $1B8   : LOAD_CHAR
 $1B9   : POP_SEC
 $1BA   : ADD
 $1BB   : PUSH_ARG
-$1BC   : CALL "_settextxy", $D08E1560
+$1BC   : CALL "_settextxy", $15881560
 $1BE   : ADJ $2
 $1C0   : PUSH_ARG_IMM $23
 $1C2   : PUSH_ARG_IMM $7FFF
-$1C4   : CALL "_printchar", $D08E13E0
+$1C4   : CALL "_printchar", $158813E0
 $1C6   : ADJ $2
 $1C8   : IMM $0
 $1CA   : STORE_LOCAL -$3, $1
@@ -271,12 +271,12 @@ $1D1   : LEA_GLOBAL $0
 $1D3   : LOAD_CHAR
 $1D4   : POP_SEC
 $1D5   : COMPARE_LT
-$1D6   : BNZ $1F1, $D09CC440
+$1D6   : BNZ $1F1, $1501C080
 $1D8   : LEA_LOCAL -$2
 $1DA   : LOAD_INT
 $1DB   : LOAD_CHAR
 $1DC   : PUSH_ARG
-$1DD   : CALL "BoxManDrawC", $D08E17C0
+$1DD   : CALL "BoxManDrawC", $158817C0
 $1DF   : ADJ $1
 $1E1   : LEA_LOCAL -$2
 $1E3   : LOAD_INT
@@ -286,19 +286,19 @@ $1E8   : LEA_LOCAL -$3
 $1EA   : LOAD_CHAR
 $1EB   : INC
 $1EC   : STORE_LOCAL -$3, $1
-$1EF   : JMP $1CD, $D09CB9F0
+$1EF   : JMP $1CD, $1501C300
 $1F1   : PUSH_ARG_IMM $23
 $1F3   : PUSH_ARG_IMM $7FFF
-$1F5   : CALL "_printchar", $D08E13E0
+$1F5   : CALL "_printchar", $158813E0
 $1F7   : ADJ $2
 $1F9   : LEA_LOCAL -$4
 $1FB   : LOAD_CHAR
 $1FC   : INC
 $1FD   : STORE_LOCAL -$4, $1
-$200   : JMP $195, $D09CB810
+$200   : JMP $195, $1501B6D0
 $202   : LEAVE
 
-DEFINE_FUNCTION "BoxmanMain", $203, $D08E18C0, $0
+DEFINE_FUNCTION "BoxmanMain", $203, $158818C0, $0
 $206   : ENTER -$13
 $208   : IMM $0
 $20A   : STORE_LOCAL -$11, $2
@@ -307,7 +307,7 @@ $20F   : STORE_LOCAL -$13, $1
 $212   : LEA_LOCAL -$13
 $214   : LOAD_CHAR
 $215   : COMPARE_GT_CONST $1
-$217   : BNZ $288, $D09CCCD0
+$217   : BNZ $288, $1501CEB0
 $219   : LEA_LOCAL -$11
 $21B   : LOAD_WORD
 $21C   : PUSH
@@ -315,25 +315,25 @@ $21D   : LEA_GLOBAL $6
 $21F   : LOAD_WORD
 $220   : POP_SEC
 $221   : COMPARE_GTEQ
-$222   : BNZ $23E, $D09CCC30
-$224   : IMM_PROG_OFFSET $526, $D09CD270
+$222   : BNZ $23E, $1501CF00
+$224   : IMM_PROG_OFFSET $526, $1501C550
 $226   : PUSH_ARG
 $227   : PUSH_ARG_IMM $7FFF
-$229   : CALL "_print", $D08E0B80
+$229   : CALL "_print", $15880810
 $22B   : ADJ $2
-$22D   : CALL "_waitkeycycle", $D08E15C0
+$22D   : CALL "_waitkeycycle", $158815C0
 $22F   : ADJ $0
 $231   : STORE_LOCAL -$12, $1
 $234   : LEA_LOCAL -$12
 $236   : LOAD_CHAR
 $237   : COMPARE_EQ_CONST $B
-$239   : BNZ $23E, $D09CD130
+$239   : BNZ $23E, $1501CD20
 $23B   : IMM $1
 $23D   : LEAVE
 $23E   : LEA_LOCAL -$11
 $240   : LOAD_WORD
 $241   : PUSH_ARG
-$242   : CALL "LoadLevel", $D08E16E0
+$242   : CALL "LoadLevel", $158816E0
 $244   : ADJ $1
 $246   : IMM $0
 $248   : STORE_LOCAL -$9, $2
@@ -352,7 +352,7 @@ $261   : POP_SEC
 $262   : ADD
 $263   : LOAD_CHAR
 $264   : STORE_LOCAL -$4, $1
-$267   : BNZ $288, $D09CD2C0
+$267   : BNZ $288, $1501D400
 $269   : LEA_LOCAL -$4
 $26B   : LOAD_CHAR
 $26C   : COMPARE_GTEQ_CONST $41
@@ -362,7 +362,7 @@ $271   : LOAD_CHAR
 $272   : COMPARE_LTEQ_CONST $45
 $274   : POP_SEC
 $275   : LAND
-$276   : BNZ $27F, $D09CCE10
+$276   : BNZ $27F, $1501C9B0
 $278   : LEA_GLOBAL $2
 $27A   : LOAD_WORD
 $27B   : INC
@@ -371,12 +371,12 @@ $27F   : LEA_LOCAL -$F
 $281   : LOAD_WORD
 $282   : INC
 $283   : STORE_LOCAL -$F, $2
-$286   : JMP $258, $D09CD400
+$286   : JMP $258, $1501D220
 $288   : LEA_LOCAL -$13
 $28A   : LOAD_CHAR
 $28B   : COMPARE_GT_CONST $0
-$28D   : BNZ $2AB, $D09CCE60
-$28F   : CALL "BoxManDrawScreen", $D08E1840
+$28D   : BNZ $2AB, $1501C640
+$28F   : CALL "BoxManDrawScreen", $15881840
 $291   : ADJ $0
 $293   : LEA_GLOBAL $0
 $295   : LOAD_CHAR
@@ -395,19 +395,19 @@ $2A8   : STORE_LOCAL -$2, $1
 $2AB   : LEA_GLOBAL $2
 $2AD   : LOAD_WORD
 $2AE   : COMPARE_EQ_CONST $0
-$2B0   : BNZ $2D9, $D09CD360
+$2B0   : BNZ $2D9, $1501CA00
 $2B2   : PUSH_ARG_IMM $0
 $2B4   : PUSH_ARG_IMM $0
-$2B6   : CALL "_settextxy", $D08E1560
+$2B6   : CALL "_settextxy", $15881560
 $2B8   : ADJ $2
-$2BA   : IMM_PROG_OFFSET $51D, $D09CCD20
+$2BA   : IMM_PROG_OFFSET $51D, $1501D3B0
 $2BC   : PUSH_ARG
 $2BD   : PUSH_ARG_IMM $7FFF
-$2BF   : CALL "_print", $D08E0B80
+$2BF   : CALL "_print", $15880810
 $2C1   : ADJ $2
-$2C3   : CALL "_waitkeycycle", $D08E15C0
+$2C3   : CALL "_waitkeycycle", $158815C0
 $2C5   : ADJ $0
-$2C7   : CALL "_cleartty", $D08E04A0
+$2C7   : CALL "_cleartty", $15880A40
 $2C9   : ADJ $0
 $2CB   : LEA_LOCAL -$11
 $2CD   : LOAD_WORD
@@ -415,7 +415,7 @@ $2CE   : INC
 $2CF   : STORE_LOCAL -$11, $2
 $2D2   : IMM $2
 $2D4   : STORE_LOCAL -$13, $1
-$2D7   : JMP $4FB, $D09CC8C0
+$2D7   : JMP $4FB, $1501C7D0
 $2D9   : LEA_GLOBAL $4
 $2DB   : LOAD_INT
 $2DC   : PUSH
@@ -454,9 +454,9 @@ $308   : LOAD_WORD
 $309   : POP_SEC
 $30A   : ADD
 $30B   : PUSH_ARG
-$30C   : CALL "_printcharat", $D08E1440
+$30C   : CALL "_printcharat", $15881440
 $30E   : ADJ $3
-$310   : CALL "_waitkeycycle", $D08E15C0
+$310   : CALL "_waitkeycycle", $158815C0
 $312   : ADJ $0
 $314   : STORE_LOCAL -$12, $1
 $317   : IMM $0
@@ -465,45 +465,45 @@ $31C   : STORE_LOCAL -$B, $2
 $31F   : LEA_LOCAL -$12
 $321   : LOAD_CHAR
 $322   : COMPARE_EQ_CONST $3
-$324   : BNZ $32D, $D09CD310
+$324   : BNZ $32D, $1501C820
 $326   : IMM $1
 $328   : STORE_LOCAL -$B, $2
-$32B   : JMP $372, $D09CCF00
+$32B   : JMP $372, $1501D1D0
 $32D   : LEA_LOCAL -$12
 $32F   : LOAD_CHAR
 $330   : COMPARE_EQ_CONST $2
-$332   : BNZ $33B, $D09CCF50
+$332   : BNZ $33B, $1501CB40
 $334   : IMM -$1
 $336   : STORE_LOCAL -$B, $2
-$339   : JMP $372, $D09CD450
+$339   : JMP $372, $1501CDC0
 $33B   : LEA_LOCAL -$12
 $33D   : LOAD_CHAR
 $33E   : COMPARE_EQ_CONST $1
-$340   : BNZ $349, $D09CD3B0
+$340   : BNZ $349, $1501C690
 $342   : IMM $1
 $344   : STORE_LOCAL -$D, $2
-$347   : JMP $372, $D09CCDC0
+$347   : JMP $372, $1501D450
 $349   : LEA_LOCAL -$12
 $34B   : LOAD_CHAR
 $34C   : COMPARE_EQ_CONST $4
-$34E   : BNZ $357, $D09CC5F0
+$34E   : BNZ $357, $1501C6E0
 $350   : IMM -$1
 $352   : STORE_LOCAL -$D, $2
-$355   : JMP $372, $D09CC500
+$355   : JMP $372, $1501D360
 $357   : LEA_LOCAL -$12
 $359   : LOAD_CHAR
 $35A   : COMPARE_EQ_CONST $A
-$35C   : BNZ $363, $D09CCFF0
+$35C   : BNZ $363, $1501C730
 $35E   : IMM $0
 $360   : LEAVE
-$361   : JMP $372, $D09CCA50
+$361   : JMP $372, $1501C870
 $363   : LEA_LOCAL -$12
 $365   : LOAD_CHAR
 $366   : COMPARE_EQ_CONST $B
-$368   : BNZ $36F, $D09CD090
+$368   : BNZ $36F, $1501CAF0
 $36A   : IMM $1
 $36C   : LEAVE
-$36D   : JMP $372, $D09CCEB0
+$36D   : JMP $372, $1501CE10
 $36F   : IMM $2
 $371   : LEAVE
 $372   : LEA_LOCAL -$7
@@ -533,7 +533,7 @@ $38F   : POP_SEC
 $390   : COMPARE_LT
 $391   : POP_SEC
 $392   : LAND
-$393   : BNZ $4FB, $D09CD040
+$393   : BNZ $4FB, $1501C780
 $395   : LEA_GLOBAL $4
 $397   : LOAD_INT
 $398   : PUSH
@@ -566,7 +566,7 @@ $3B9   : ADD
 $3BA   : LOAD_CHAR
 $3BB   : STORE_LOCAL -$4, $1
 $3BE   : COMPARE_EQ_CONST $20
-$3C0   : BNZ $3E1, $D09CC6E0
+$3C0   : BNZ $3E1, $1501C8C0
 $3C2   : LEA_LOCAL -$7
 $3C4   : LOAD_WORD
 $3C5   : PUSH
@@ -585,7 +585,7 @@ $3D6   : ADD
 $3D7   : STORE_LOCAL -$9, $2
 $3DA   : IMM $1
 $3DC   : STORE_LOCAL -$13, $1
-$3DF   : JMP $4FB, $D09CD0E0
+$3DF   : JMP $4FB, $1501CE60
 $3E1   : LEA_LOCAL -$4
 $3E3   : LOAD_CHAR
 $3E4   : COMPARE_GTEQ_CONST $61
@@ -595,7 +595,7 @@ $3E9   : LOAD_CHAR
 $3EA   : COMPARE_LTEQ_CONST $65
 $3EC   : POP_SEC
 $3ED   : LAND
-$3EE   : BNZ $4FB, $D09CC550
+$3EE   : BNZ $4FB, $1501CB90
 $3F0   : LEA_LOCAL -$7
 $3F2   : LOAD_WORD
 $3F3   : PUSH
@@ -633,7 +633,7 @@ $419   : POP_SEC
 $41A   : COMPARE_LT
 $41B   : POP_SEC
 $41C   : LAND
-$41D   : BNZ $4FB, $D09CCFA0
+$41D   : BNZ $4FB, $1501D2C0
 $41F   : LEA_GLOBAL $4
 $421   : LOAD_INT
 $422   : PUSH
@@ -687,7 +687,7 @@ $45F   : SUB
 $460   : COMPARE_EQ_CONST $20
 $462   : POP_SEC
 $463   : LOR
-$464   : BNZ $4FB, $D09CC730
+$464   : BNZ $4FB, $1501CA50
 $466   : LEA_GLOBAL $4
 $468   : LOAD_INT
 $469   : PUSH
@@ -772,7 +772,7 @@ $4CE   : STORE $2
 $4D0   : LEA_LOCAL -$5
 $4D2   : LOAD_CHAR
 $4D3   : COMPARE_NEQ_CONST $20
-$4D5   : BNZ $4DE, $D09CCD70
+$4D5   : BNZ $4DE, $1501D310
 $4D7   : LEA_GLOBAL $2
 $4D9   : LOAD_WORD
 $4DA   : DEC
@@ -795,22 +795,22 @@ $4F2   : ADD
 $4F3   : STORE_LOCAL -$9, $2
 $4F6   : IMM $1
 $4F8   : STORE_LOCAL -$13, $1
-$4FB   : JMP $212, $D09CC5A0
+$4FB   : JMP $212, $1501CF50
 $4FD   : LEAVE
 
-DEFINE_FUNCTION "main", $4FE, $D09CC640, $0
+DEFINE_FUNCTION "main", $4FE, $1501D180, $0
 $501   : ENTER $0
 $503   : IMM $F2000001
 $505   : STORE_GLOBAL $4, $41
 $508   : IMM $2
 $50A   : STORE_GLOBAL $6, $2
-$50D   : CALL "_waitkeycycle", $D08E15C0
+$50D   : CALL "_waitkeycycle", $158815C0
 $50F   : ADJ $0
-$511   : CALL "BoxmanMain", $D08E18C0
+$511   : CALL "BoxmanMain", $158818C0
 $513   : ADJ $0
 $515   : COMPARE_NEQ_CONST $1
-$517   : BNZ $51B, $D09CD180
-$519   : JMP $511, $D09CC690
+$517   : BNZ $51B, $1501C910
+$519   : JMP $511, $1501D130
 $51B   : LEAVE
 $51C   : NOP
 db $6F, $75, $20, $77, $69, $6E, $21, 0

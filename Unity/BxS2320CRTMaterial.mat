@@ -69,7 +69,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _RomTex:
-        m_Texture: {fileID: 2800000, guid: 9cd0c4f215745e44485278eb8c92e6f5, type: 3}
+        m_Texture: {fileID: 2800000, guid: ca0a9bdd7f5a12d478c134f9c6adb7f3, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
@@ -82,7 +82,7 @@ Material:
     - _Glossiness: 0.5
     - _GlossyReflections: 1
     - _IPF: 65536
-    - _IPF_MAX: 1024
+    - _IPF_MAX: 1
     - _InputChar: 0
     - _Metallic: 0
     - _Mode: 0

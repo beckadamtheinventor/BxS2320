@@ -629,7 +629,6 @@ void emuTick(Emu *emu) {
 			}
 			break;
 		case 0xD8: // call rX
-			regs[0]++;
 			if (jump) {
 				regs[2] -= 2;
 				emu_write_long(regs[2], regs[0]);
@@ -668,9 +667,14 @@ void emuTick(Emu *emu) {
 				}
 			}
 			break;
+		case 0xFF: // testhalt rX, value
+			if (sval != sval2) {
+				regs[1] |= F_HALT;
+			}
+			break;
 		default:
-			regs[5] = regs[0];
-			regs[0] = 0;
+			regs[5] = opcode;
+			regs[1] |= F_HALT;
 			break;
 	}
 	if (opcode >= 0x3E && opcode < 0x70) { // lor, land, arithmetic opcodes

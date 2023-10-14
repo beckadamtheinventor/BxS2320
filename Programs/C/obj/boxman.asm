@@ -2,140 +2,140 @@ call ._init
 jp ._main
 ._exit := 0
 label ._init
-label ._2468810200800
-label ._2468811162048
-label ._2468811120112
-label ._2468811117968
+label ._1911621687008
+label ._1911612880992
+label ._1911612841456
+label ._1911612839312
 label ._LoadLevel
 push r12
 ld r12,r2
 ld r30,r24l
 cmpi r30l,0
-jq nz, ._2468811161888
+jq nz, ._1911612881632
 ldi r30,$F0000004
 ildr r30,r30
 ld r24,r30
-ldi r30,.s_2468811160768
+ldi r30,.s_1911612883392
 ld r25,r30
 call _strcpy
-jq ._2468811158768
-label ._2468811161888
+jq ._1911612881072
+label ._1911612881632
 ld r30,r24l
 cmpi r30l,1
-jq nz, ._2468811161728
+jq nz, ._1911612881472
 ldi r30,$F0000004
 ildr r30,r30
 ld r24,r30
-ldi r30,.s_2468811159168
+ldi r30,.s_1911612880752
 ld r25,r30
 call _strcpy
-label ._2468811161728
-label ._2468811158768
+label ._1911612881472
+label ._1911612881072
 ld r2,r12
 pop r12
 ret
-label ._2468810201024
+label ._1911621687232
 label ._BoxManDrawC
 push r12
 ld r12,r2
 ld r30,r24a
 cmpi r30a,65
-jq nz, ._2468811161808
+jq nz, ._1911612883472
 ldi r24,35
 ldi r25,31744
 call _printchar
-jq ._2468811161008
-label ._2468811161808
+jq ._1911612881952
+label ._1911612883472
 ld r30,r24a
 cmpi r30a,66
-jq nz, ._2468811162608
+jq nz, ._1911612881312
 ldi r24,35
 ldi r25,992
 call _printchar
-jq ._2468811160608
-label ._2468811162608
+jq ._1911612882832
+label ._1911612881312
 ld r30,r24a
 cmpi r30a,67
-jq nz, ._2468811159408
+jq nz, ._1911612881152
 ldi r24,35
 ldi r25,31
 call _printchar
-jq ._2468811160528
-label ._2468811159408
+jq ._1911612882032
+label ._1911612881152
 ld r30,r24a
 cmpi r30a,68
-jq nz, ._2468811162288
+jq nz, ._1911612881392
 ldi r24,35
 ldi r25,32736
 call _printchar
-jq ._2468811160288
-label ._2468811162288
+jq ._1911612882192
+label ._1911612881392
 ld r30,r24a
 cmpi r30a,69
-jq nz, ._2468811162368
+jq nz, ._1911612881712
 ldi r24,35
 ldi r25,1023
 call _printchar
-jq ._2468811161328
-label ._2468811162368
+jq ._1911612880272
+label ._1911612881712
 ld r30,r24a
 cmpi r30a,97
-jq nz, ._2468811159888
+jq nz, ._1911612881232
 ldi r24,79
 ldi r25,31744
 call _printchar
-jq ._2468811161648
-label ._2468811159888
+jq ._1911612882752
+label ._1911612881232
 ld r30,r24a
 cmpi r30a,98
-jq nz, ._2468811159808
+jq nz, ._1911612881552
 ldi r24,79
 ldi r25,992
 call _printchar
-jq ._2468811162448
-label ._2468811159808
+jq ._1911612883312
+label ._1911612881552
 ld r30,r24a
 cmpi r30a,99
-jq nz, ._2468811159648
+jq nz, ._1911612882512
 ldi r24,79
 ldi r25,31
 call _printchar
-jq ._2468811161248
-label ._2468811159648
+jq ._1911612882432
+label ._1911612882512
 ld r30,r24a
 cmpi r30a,100
-jq nz, ._2468811161088
+jq nz, ._1911612880832
 ldi r24,79
 ldi r25,32736
 call _printchar
-jq ._2468811160688
-label ._2468811161088
+jq ._1911612882672
+label ._1911612880832
 ld r30,r24a
 cmpi r30a,101
-jq nz, ._2468811159328
+jq nz, ._1911612882592
 ldi r24,79
 ldi r25,1023
 call _printchar
-jq ._2468811161168
-label ._2468811159328
+jq ._1911612881792
+label ._1911612882592
 ld r30,r24a
 ld r24,r30a
 ldi r25,32767
 call _printchar
-label ._2468811161168
-label ._2468811160688
-label ._2468811161248
-label ._2468811162448
-label ._2468811161648
-label ._2468811161328
-label ._2468811160288
-label ._2468811160528
-label ._2468811160608
-label ._2468811161008
+label ._1911612881792
+label ._1911612882672
+label ._1911612882432
+label ._1911612883312
+label ._1911612882752
+label ._1911612880272
+label ._1911612882192
+label ._1911612882032
+label ._1911612882832
+label ._1911612881952
 ld r2,r12
 pop r12
 ret
-label ._2468810201152
+label ._1911621687360
 label ._BoxManDrawScreen
 push r12
 ld r12,r2
@@ -176,7 +176,7 @@ ld r25,r30
 call _settextxy
 ldz r30
 str r30a,r12,-1
-label ._2468811162528
+label ._1911612882272
 ildr r30a,r12,-1
 push r30
 ldi r30,$F0000000
@@ -184,15 +184,15 @@ ildr r30a,r30
 addi r30a,2
 pop r31
 cmp r30a,r31a
-jq nc, ._2468811162128
+jq nc, ._1911612882912
 ldi r24,35
 ldi r25,32767
 call _printchar
 ildr r30a,r12,-1
 inc r30a
 str r30a,r12,-1
-jq ._2468811162528
-label ._2468811162128
+jq ._1911612882272
+label ._1911612882912
 ldi r30,$F0000000
 ildr r30a,r30
 ex r30,r31
@@ -216,7 +216,7 @@ ld r25,r30a
 call _settextxy
 ldz r30
 str r30a,r12,-1
-label ._2468811161968
+label ._1911612883792
 ildr r30a,r12,-1
 push r30
 ldi r30,$F0000000
@@ -224,25 +224,25 @@ ildr r30a,r30
 addi r30a,2
 pop r31
 cmp r30a,r31a
-jq nc, ._2468811161568
+jq nc, ._1911612883552
 ldi r24,35
 ldi r25,32767
 call _printchar
 ildr r30a,r12,-1
 inc r30a
 str r30a,r12,-1
-jq ._2468811161968
-label ._2468811161568
+jq ._1911612883792
+label ._1911612883552
 ldz r30
 str r30a,r12,-2
-label ._2468811159568
+label ._1911612880592
 ildr r30a,r12,-2
 push r30
 ldi r30,$F0000001
 ildr r30a,r30
 pop r31
 cmp r30a,r31a
-jq nc, ._2468811162208
+jq nc, ._1911612882992
 ldi r30,$F0000000
 ildr r30a,r30
 ex r30,r31
@@ -268,14 +268,14 @@ ldi r25,32767
 call _printchar
 ldz r30
 str r30a,r12,-1
-label ._2468811160048
+label ._1911612883712
 ildr r30a,r12,-1
 push r30
 ldi r30,$F0000000
 ildr r30a,r30
 pop r31
 cmp r30a,r31a
-jq nc, ._2468811162688
+jq nc, ._1911612883072
 ildr r30,r12,-1
 ildr r30a,r30
 ld r24,r30a
@@ -286,20 +286,20 @@ str r30a,r12,-1
 ildr r30a,r12,-1
 inc r30a
 str r30a,r12,-1
-jq ._2468811160048
-label ._2468811162688
+jq ._1911612883712
+label ._1911612883072
 ldi r24,35
 ldi r25,32767
 call _printchar
 ildr r30a,r12,-2
 inc r30a
 str r30a,r12,-2
-jq ._2468811159568
-label ._2468811162208
+jq ._1911612880592
+label ._1911612882992
 ld r2,r12
 pop r12
 ret
-label ._2468810201280
+label ._1911621687488
 label ._BoxmanMain
 push r12
 ld r12,r2
@@ -308,10 +308,10 @@ ldz r30
 str r30l,r12,-8
 ldi r30,2
 str r30a,r12,-9
-label ._2468811163040
+label ._1911612886864
 ildr r30a,r12,-9
 cmpi r30a,2
-jq c, ._2468811164880
+jq c, ._1911612886704
 ildr r30l,r12,-8
 push r30
 ldi r30,$F0000006
@@ -319,8 +319,8 @@ ildr r30l,r30
 pop r31
 inc r31l
 cmp r30l,r31l
-jq nc, ._2468811164720
-ldi r30,.s_2468811166320
+jq nc, ._1911612886784
+ldi r30,.s_1911612884304
 ld r24,r30
 ldi r25,32767
 call _print
@@ -328,13 +328,13 @@ call _waitkeycycle
 str r30a,r12,-9
 ildr r30a,r12,-9
 cmpi r30a,11
-jq nz, ._2468811166000
+jq nz, ._1911612886304
 ldi r30,1
 ld r2,r12
 pop r12
 ret
-label ._2468811166000
-label ._2468811164720
+label ._1911612886304
+label ._1911612886784
 ildr r30l,r12,-8
 ld r24,r30l
 call ._LoadLevel
@@ -345,7 +345,7 @@ ldz r30
 sto r30l,$F0000002
 ldz r30
 str r30l,r12,-7
-label ._2468811166720
+label ._1911612887584
 ldi r30,$F0000004
 ildr r30,r30
 push r30
@@ -355,7 +355,7 @@ add r30l,r31l
 ildr r30a,r30
 str r30a,r12,-2
 or r30a,r30a
-jq z, ._2468811166400
+jq z, ._1911612888064
 ildr r30a,r12,-2
 cmpi r30a,65
 flagxor 1
@@ -369,21 +369,21 @@ flagand 1
 ld r30,r1a
 land r30a,r31a
 or r30a,r30a
-jq z, ._2468811165200
+jq z, ._1911612885424
 ldi r30,$F0000002
 ildr r30l,r30
 inc r30l
 sto r30l,$F0000002
-label ._2468811165200
+label ._1911612885424
 ildr r30l,r12,-7
 inc r30l
 str r30l,r12,-7
-jq ._2468811166720
-label ._2468811166400
-label ._2468811164880
+jq ._1911612887584
+label ._1911612888064
+label ._1911612886704
 ildr r30a,r12,-9
 cmpi r30a,1
-jq c, ._2468811165280
+jq c, ._1911612884544
 call ._BoxManDrawScreen
 ldi r30,$F0000000
 ildr r30a,r30
@@ -399,15 +399,15 @@ ldi r30,16
 sub r30,r31
 shri r30,1
 str r30a,r12,-1
-label ._2468811165280
+label ._1911612884544
 ldi r30,$F0000002
 ildr r30l,r30
 cmpi r30l,0
-jq nz, ._2468811166560
+jq nz, ._1911612885504
 ldi r24,0
 ldi r25,0
 call _settextxy
-ldi r30,.s_2468811164960
+ldi r30,.s_1911612887984
 ld r24,r30
 ldi r25,32767
 call _print
@@ -418,8 +418,8 @@ inc r30l
 str r30l,r12,-8
 ldi r30,2
 str r30a,r12,-9
-jq ._2468811163840
-label ._2468811166560
+jq ._1911612884944
+label ._1911612885504
 ldi r30,$F0000004
 ildr r30,r30
 push r30
@@ -459,60 +459,60 @@ str r30l,r12,-6
 str r30l,r12,-5
 ildr r30a,r12,-9
 cmpi r30a,3
-jq nz, ._2468811166480
+jq nz, ._1911612885024
 ldi r30,1
 str r30l,r12,-5
-jq ._2468811165440
-label ._2468811166480
+jq ._1911612887504
+label ._1911612885024
 ildr r30a,r12,-9
 cmpi r30a,2
-jq nz, ._2468811165520
+jq nz, ._1911612885824
 ldi r30,4294967295
 str r30l,r12,-5
-jq ._2468811166800
-label ._2468811165520
+jq ._1911612886464
+label ._1911612885824
 ildr r30a,r12,-9
 cmpi r30a,1
-jq nz, ._2468811166640
+jq nz, ._1911612884624
 ldi r30,1
 str r30l,r12,-6
-jq ._2468811165120
-label ._2468811166640
+jq ._1911612888144
+label ._1911612884624
 ildr r30a,r12,-9
 cmpi r30a,4
-jq nz, ._2468811163120
+jq nz, ._1911612884704
 ldi r30,4294967295
 str r30l,r12,-6
-jq ._2468811162880
-label ._2468811163120
+jq ._1911612887904
+label ._1911612884704
 ildr r30a,r12,-9
 cmpi r30a,10
-jq nz, ._2468811165680
+jq nz, ._1911612884784
 ldz r30
 ld r2,r12
 pop r12
 ret
-jq ._2468811164240
-label ._2468811165680
+jq ._1911612885104
+label ._1911612884784
 ildr r30a,r12,-9
 cmpi r30a,11
-jq nz, ._2468811165840
+jq nz, ._1911612885744
 ldi r30,1
 ld r2,r12
 pop r12
 ret
-jq ._2468811165360
-label ._2468811165840
+jq ._1911612886544
+label ._1911612885744
 ldi r30,2
 ld r2,r12
 pop r12
 ret
-label ._2468811165360
-label ._2468811164240
-label ._2468811162880
-label ._2468811165120
-label ._2468811166800
-label ._2468811165440
+label ._1911612886544
+label ._1911612885104
+label ._1911612887904
+label ._1911612888144
+label ._1911612886464
+label ._1911612887504
 ildr r30l,r12,-3
 push r30
 ildr r30l,r12,-5
@@ -541,7 +541,7 @@ flagand 1
 ld r30,r1a
 land r30a,r31a
 or r30a,r30a
-jq z, ._2468811165760
+jq z, ._1911612884864
 ldi r30,$F0000004
 ildr r30,r30
 push r30
@@ -569,7 +569,7 @@ add r30l,r31l
 ildr r30a,r30
 str r30a,r12,-2
 cmpi r30a,32
-jq nz, ._2468811163360
+jq nz, ._1911612885184
 ildr r30l,r12,-3
 push r30
 ildr r30l,r12,-5
@@ -584,8 +584,8 @@ add r30l,r31l
 str r30l,r12,-4
 ldi r30,1
 str r30a,r12,-9
-jq ._2468811165920
-label ._2468811163360
+jq ._1911612886624
+label ._1911612885184
 ildr r30a,r12,-2
 cmpi r30a,97
 flagxor 1
@@ -599,7 +599,7 @@ flagand 1
 ld r30,r1a
 land r30a,r31a
 or r30a,r30a
-jq z, ._2468811162960
+jq z, ._1911612885904
 ildr r30l,r12,-3
 push r30
 ildr r30l,r12,-5
@@ -636,7 +636,7 @@ flagand 1
 ld r30,r1a
 land r30a,r31a
 or r30a,r30a
-jq z, ._2468811165600
+jq z, ._1911612887744
 ldi r30,$F0000004
 ildr r30,r30
 push r30
@@ -688,7 +688,7 @@ ld r30,r1a
 shri r30a,1
 lor r30a,r31a
 or r30a,r30a
-jq z, ._2468811163440
+jq z, ._1911612885584
 ldi r30,$F0000004
 ildr r30,r30
 push r30
@@ -757,12 +757,12 @@ ldi r30,32
 str r30,r31
 ildr r30a,r12,-2
 cmpi r30a,32
-jq z, ._2468811165040
+jq z, ._1911612887824
 ldi r30,$F0000002
 ildr r30l,r30
 dec r30l
 sto r30l,$F0000002
-label ._2468811165040
+label ._1911612887824
 ildr r30l,r12,-3
 push r30
 ildr r30l,r12,-5
@@ -777,17 +777,17 @@ add r30l,r31l
 str r30l,r12,-4
 ldi r30,1
 str r30a,r12,-9
-label ._2468811163840
-label ._2468811165920
-label ._2468811162960
-label ._2468811165600
-label ._2468811163440
-label ._2468811165760
-jq ._2468811163040
+label ._1911612884944
+label ._1911612886624
+label ._1911612885904
+label ._1911612887744
+label ._1911612885584
+label ._1911612884864
+jq ._1911612886864
 ld r2,r12
 pop r12
 ret
-label ._2468811163200
+label ._1911612887424
 label ._main
 push r12
 ld r12,r2
@@ -796,16 +796,16 @@ sto r30,$F0000004
 ldi r30,2
 sto r30l,$F0000006
 call _waitkeycycle
-label ._2468811163280
+label ._1911612887344
 call ._BoxmanMain
 cmpi r30a,1
-jq z, ._2468811166080
-jq ._2468811163280
-label ._2468811166080
+jq z, ._1911612885264
+jq ._1911612887344
+label ._1911612885264
 ld r2,r12
 pop r12
 ret
-label .s_2468811164960
+label .s_1911612887984
 dw $59
 dw $6F
 dw $75
@@ -815,7 +815,7 @@ dw $69
 dw $6E
 dw $21
 dw $0
-label .s_2468811166320
+label .s_1911612884304
 dw $59
 dw $6F
 dw $75
@@ -825,7 +825,7 @@ dw $69
 dw $6E
 dw $21
 dw $0
-label .s_2468811159168
+label .s_1911612880752
 dw $55
 dw $20
 dw $20
@@ -856,7 +856,7 @@ dw $0
 dw $0
 dw $0
 dw $0
-label .s_2468811160768
+label .s_1911612883392
 dw $55
 dw $20
 dw $23

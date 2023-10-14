@@ -427,8 +427,8 @@ label _inittty
 
 label _cleartty
 	ldi arg0, GRAM_START
-assert ~GRAM_START and $FF
-	sto arg0a, TTY_TEXT_ROW_COL
+assert ~GRAM_START and $FFFF
+	sto arg0l, TTY_TEXT_ROW_COL
 	ldz arg1l
 	ldi arg2, GRAM_SIZE
 
